@@ -133,7 +133,7 @@ textarea{
 <div id="bouquetScene">
     <div class="bouquet">💐🌹💖</div>
     <div class="romantic-text">
-        My love, every moment with you makes my heart bloom brighter than a thousand roses. You are my sunshine, my happiness, and my sweetest dream come true. Being with you fills my world with endless love and joy, and I can’t imagine a day without you by my side 💖🌹💞.
+        AWWWWWWWWWWWWWWWWW I LOVE YOUUUUUUUUUUUUUUU 💖🌹💞
     </div>
 
     <textarea id="loveInput" placeholder="Leave a sweet message... 💌"></textarea><br>
@@ -141,12 +141,18 @@ textarea{
     <div class="love-message" id="displayMessage"></div>
 </div>
 
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <script>
+(function(){
+   emailjs.init("YOUR_PUBLIC_KEY"); // 🔥 REPLACE WITH YOUR PUBLIC KEY
+})();
+
 const noBtn=document.getElementById("noBtn");
 const yesBtn=document.getElementById("yesBtn");
 const bouquetScene=document.getElementById("bouquetScene");
 
-/* Move NO button */
 function moveNo(){
     const container=document.querySelector(".buttons");
     const maxX=container.clientWidth-noBtn.offsetWidth;
@@ -155,7 +161,6 @@ function moveNo(){
     noBtn.style.top=Math.random()*maxY+"px";
 }
 
-/* Emoji popup far from NO button */
 function showEmojiFar(){
     const emoji=document.createElement("div");
     emoji.classList.add("emoji-pop");
@@ -171,15 +176,8 @@ noBtn.addEventListener("mouseenter",function(e){
     showEmojiFar();
 });
 
-noBtn.addEventListener("touchstart",function(e){
-    e.preventDefault();
-    moveNo();
-    showEmojiFar();
-});
-
 moveNo();
 
-/* YES pressed: bouquet + glowing heart rain + sparkles */
 yesBtn.addEventListener("click", function() {
     document.body.style.opacity = "0";
     document.body.style.transition = "opacity 1s";
@@ -187,71 +185,31 @@ yesBtn.addEventListener("click", function() {
     setTimeout(() => {
         bouquetScene.classList.add("active");
         document.body.style.opacity = "1";
-        createSparkles();
-        startHeartRainStaggered();
     }, 1000);
 });
 
-/* Submit message */
+/* 💌 SEND EMAIL FUNCTION */
 function submitMessage(){
-    const input=document.getElementById("loveInput").value;
-    const display=document.getElementById("displayMessage");
+    const input = document.getElementById("loveInput").value;
+    const display = document.getElementById("displayMessage");
 
-    if(input.trim()!==""){
-        display.innerHTML="💌 \""+input+"\" 💖";
-    }
-}
+    if(input.trim() !== ""){
 
-/* Floating hearts */
-function createHeart(){
-    const heart=document.createElement("div");
-    heart.classList.add("heart");
-    heart.innerHTML=["💖","💕","💘","💝"][Math.floor(Math.random()*4)];
-    heart.style.left=Math.random()*100+"vw";
-    heart.style.fontSize=(Math.random()*25+20)+"px";
-    heart.style.animationDuration=(Math.random()*6+6)+"s";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),10000);
-}
-setInterval(createHeart,300);
+        const templateParams = {
+            mahiwagangmensahe: input  // 🔥 MATCHES YOUR EMAILJS TEMPLATE
+        };
 
-/* Sparkles */
-function createSparkles(){
-    setInterval(()=>{
-        const sparkle=document.createElement("div");
-        sparkle.classList.add("sparkle");
-        sparkle.innerHTML="✨";
-        sparkle.style.left=Math.random()*100+"vw";
-        document.body.appendChild(sparkle);
-        setTimeout(()=>sparkle.remove(),4000);
-    },300);
-}
-
-/* Staggered Heart Rain - 5 seconds duration, hearts appear at different times */
-function startHeartRainStaggered(){
-    const totalHearts = 20;
-    for(let i=0; i<totalHearts; i++){
-        // Staggered delay
-        setTimeout(()=>{
-            const heart = document.createElement("div");
-            heart.innerHTML = ["💖","💕","💘","💝"][Math.floor(Math.random()*4)];
-            heart.style.position = "fixed";
-            heart.style.left = Math.random()*100 + "vw";
-            heart.style.top = "-80px";
-            heart.style.fontSize = Math.random()*50 + 50 + "px";
-            heart.style.opacity = 0.8;
-            heart.style.textShadow = "0 0 30px #ff66b2, 0 0 60px #ff99cc";
-            heart.style.pointerEvents = "none";
-            document.body.appendChild(heart);
-
-            const duration = 5000; // 5 seconds
-            heart.animate([
-                { transform: translateY(0px) },
-                { transform: translateY(100vh) }
-            ], { duration: duration, iterations:1, easing: "ease-out" });
-
-            setTimeout(()=>heart.remove(), duration);
-        }, i*200); // each heart delayed by 200ms
+        emailjs.send(
+            "service_vi9ffxq",      // ✅ Your Service ID
+            "YOUR_TEMPLATE_ID",     // 🔥 REPLACE WITH YOUR TEMPLATE ID
+            templateParams
+        )
+        .then(function(response) {
+            display.innerHTML = "💌 Message sent to my Gmail 💖";
+        }, function(error) {
+            display.innerHTML = "❌ Failed to send!";
+            console.log(error);
+        });
     }
 }
 </script>
